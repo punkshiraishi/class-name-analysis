@@ -1,0 +1,14 @@
+#!/bin/bash
+
+TARGET=${TARGET:-./}
+
+cat ./tailwind_class_list | while read -r class_name
+do
+  grep -orE "[ \"']${PREFIX}${class_name}[ \"'$]" $TARGET \
+  | wc -l \
+  | xargs -Icount echo "${class_name} count" >> /tmp/class_list_result
+done
+
+sort -r -n -t " " -k 2,2 /tmp/class_list_result
+
+rm /tmp/class_list_result
